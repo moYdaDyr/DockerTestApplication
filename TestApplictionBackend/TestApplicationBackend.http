@@ -1,0 +1,6 @@
+@TestApplictionBackend_HostAddress = http://localhost:5113
+
+GET {{TestApplictionBackend_HostAddress}}/api/reports/all/
+Accept: application/json
+
+###
