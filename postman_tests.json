@@ -8,14 +8,60 @@
   },
   "item": [
     {
-      "name": "LoginNoAccount",
+      "name": "CreateAccount",
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 404\", function () {\r",
-              "    pm.response.to.have.status(404);\r",
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "    let jsonData = pm.response.json();\r",
+              "    let responseText = jsonData.id;\r",
+              "    responseText = Array.from(responseText).filter(char => char != '\\\"').join(\"\")\r",
+              "    pm.collectionVariables.set('FreshAccountId', responseText)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"aaaa\",\r\n  \"surname\": \"bbbb\",\r\n  \"profession\": \"cccc\",\r\n  \"password\": \"string\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_accounts}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url_accounts}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LoginRightPassword",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -29,7 +75,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"Id\": \"{{NonExistedAccount}}\",\r\n  \"Password\": \"{{AccountRightPassword}}\"\r\n}",
+          "raw": "{\r\n  \"Id\": \"{{FreshAccountId}}\",\r\n  \"Password\": \"string\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -71,7 +117,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"Id\": \"{{ExistedAccount}}\",\r\n  \"Password\": \"{{AccountWrongPassword}}\"\r\n}",
+          "raw": "{\r\n  \"Id\": \"{{FreshAccountId}}\",\r\n  \"Password\": \"not_string\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -86,94 +132,6 @@
           ],
           "path": [
             "login"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "LoginRightPassword",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"Id\": \"{{ExistedAccount}}\",\r\n  \"Password\": \"{{AccountRightPassword}}\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://{{base_url_accounts}}/login",
-          "protocol": "http",
-          "host": [
-            "{{base_url_accounts}}"
-          ],
-          "path": [
-            "login"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "CreateAccount",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "    let jsonData = pm.response.json();\r",
-              "    let responseText = jsonData.id;\r",
-              "    responseText = Array.from(responseText).filter(char => char != '\\\"').join(\"\")\r",
-              "    pm.collectionVariables.set('FreshAccountId', responseText)\r",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"name\": \"aaaa\",\r\n  \"surname\": \"bbbb\",\r\n  \"profession\": \"cccc\",\r\n  \"password\": \"string\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://{{base_url_accounts}}",
-          "protocol": "http",
-          "host": [
-            "{{base_url_accounts}}"
           ]
         }
       },
@@ -250,7 +208,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"name\": \"report\",\r\n  \"text\": \"bbbbbbbb\",\r\n  \"author\": \"{{ExistingAuthor}}\",\r\n  \"isTestPassed\": true\r\n}",
+          "raw": "{\r\n  \"name\": \"report\",\r\n  \"text\": \"bbbbbbbb\",\r\n  \"author\": \"{{FreshAccountId}}\",\r\n  \"isTestPassed\": true\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -333,10 +291,10 @@
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://{{base_url}}/{{FreshAccountId}}",
+          "raw": "http://{{base_url_accounts}}/{{FreshAccountId}}",
           "protocol": "http",
           "host": [
-            "{{base_url}}"
+            "{{base_url_accounts}}"
           ],
           "path": [
             "{{FreshAccountId}}"
@@ -376,6 +334,48 @@
           ],
           "path": [
             "{{FreshAccountId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LoginNoAccount",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.response.to.have.status(404);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Id\": \"{{FreshAccountId}}\",\r\n  \"Password\": \"string\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_accounts}}/login",
+          "protocol": "http",
+          "host": [
+            "{{base_url_accounts}}"
+          ],
+          "path": [
+            "login"
           ]
         }
       },
