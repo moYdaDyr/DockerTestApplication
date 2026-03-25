@@ -1,0 +1,493 @@
+
+  "info": {
+    "_postman_id": "b31aa244-543d-4721-8660-73695c4c6237",
+    "name": "CommonTestCollection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51836606",
+    "_collection_link": "https://go.postman.co/collection/51836606-b31aa244-543d-4721-8660-73695c4c6237?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "LoginNoAccount",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.response.to.have.status(404);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Id\": \"{{NonExistedAccount}}\",\r\n  \"Password\": \"{{AccountRightPassword}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_accounts}}/login",
+          "protocol": "http",
+          "host": [
+            "{{base_url_accounts}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LoginWrongPassword",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {\r",
+              "    pm.response.to.have.status(400);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Id\": \"{{ExistedAccount}}\",\r\n  \"Password\": \"{{AccountWrongPassword}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_accounts}}/login",
+          "protocol": "http",
+          "host": [
+            "{{base_url_accounts}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LoginRightPassword",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Id\": \"{{ExistedAccount}}\",\r\n  \"Password\": \"{{AccountRightPassword}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_accounts}}/login",
+          "protocol": "http",
+          "host": [
+            "{{base_url_accounts}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateAccount",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "    let jsonData = pm.response.json();\r",
+              "    let responseText = jsonData.id;\r",
+              "    responseText = Array.from(responseText).filter(char => char != '\\\"').join(\"\")\r",
+              "    pm.collectionVariables.set('FreshAccountId', responseText)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"aaaa\",\r\n  \"surname\": \"bbbb\",\r\n  \"profession\": \"cccc\",\r\n  \"password\": \"string\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_accounts}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url_accounts}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateAccountNonValid",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {\r",
+              "    pm.response.to.have.status(400);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"имя\": \"aaaa\",\r\n  \"фамилия\": \"bbbb\",\r\n  \"должность\": \"cccc\",\r\n  \"пароль\": \"string\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_accounts}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url_accounts}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateReport",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "    let jsonData = pm.response.json();\r",
+              "    let responseText = jsonData.id;\r",
+              "    responseText = Array.from(responseText).filter(char => char != '\\\"').join(\"\")\r",
+              "    pm.collectionVariables.set('FreshReportId', responseText)\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"report\",\r\n  \"text\": \"bbbbbbbb\",\r\n  \"author\": \"{{ExistingAuthor}}\",\r\n  \"isTestPassed\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_reports}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url_reports}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateReportNonValid",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {\r",
+              "    pm.response.to.have.status(400);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"имя\": \"report\",\r\n  \"текст\": \"bbbbbbbb\",\r\n  \"автор\": \"Ivan Ivanov\",\r\n  \"результат\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{base_url_reports}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url_reports}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DeleteAccount",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://{{base_url}}/{{FreshAccountId}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "{{FreshAccountId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DeleteAccountNonExist",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.response.to.have.status(404);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://{{base_url_accounts}}/{{FreshAccountId}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url_accounts}}"
+          ],
+          "path": [
+            "{{FreshAccountId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DeleteReport",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://{{base_url_reports}}/{{FreshReportId}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url_reports}}"
+          ],
+          "path": [
+            "{{FreshReportId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DeleteReportNonExist",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.response.to.have.status(404);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://{{base_url_reports}}/{{FreshReportId}}",
+          "protocol": "http",
+          "host": [
+            "{{base_url_reports}}"
+          ],
+          "path": [
+            "{{FreshReportId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url_accounts",
+      "value": "localhost:5000/api/accounts"
+    },
+    {
+      "key": "base_url_reports",
+      "value": "localhost:5000/api/reports"
+    },
+    {
+      "key": "FreshReportId",
+      "value": ""
+    },
+    {
+      "key": "FreshAccountId",
+      "value": ""
+    }
+  ]
+}
